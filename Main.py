@@ -44,9 +44,10 @@ def extract_data(text):
     category_pattern = '|'.join(re.escape(cat) for cat in categories)
     pattern = re.compile(rf'(?P<Category>{category_pattern})\s*[-—_–]*\s*R\$[\s]*(?P<Value>[\d\.,]+)', re.IGNORECASE)
     # Encontrar todas as correspondências no texto
-    matches = pattern.findall(text)
+    matches = pattern.findall(text) 
     # Inicializar uma lista vazia para armazenar os dados extraídos
     data = []
+    
     # Iterar sobre todas as correspondências encontradas
     for match in matches:
         # Desempacotar a correspondência em duas variáveis: category e value
@@ -54,7 +55,9 @@ def extract_data(text):
         # Remover espaços desnecessários da categoria
         category = category.strip()
         # Limpar e converter o valor
-        value = value.replace('R$', '').replace('.', '').replace(',', '.').strip()
+        #print('valor antes do replace',value)
+        value = value.replace('R$', '').replace('.', '').replace(',', '').strip()
+        #print('valor depois do replace',value)
         # Tentar converter o valor para float
         try:
             value = float(value)
@@ -64,6 +67,7 @@ def extract_data(text):
             continue
     # Retornar a lista de dados extraídos
     return data
+    
 
 # Função para procurar a imagem e definir a região de captura
 def find_image_and_set_region(image_path, confidence=0.7):
@@ -127,7 +131,8 @@ def capture_and_process_screen(image_path):
 
                 # Converter imagem processada em texto
                 text = image_to_text(processed_image)
-                print('Texto extraido- '+ text)
+                print(f'''texto extraido da imagem:
+                {text}''')
                 # Extrair dados do texto
                 data = extract_data(text)
                 print (data)
@@ -135,7 +140,7 @@ def capture_and_process_screen(image_path):
                 # Verificar se a função extraiu algum dado e, em caso afirmativo, exibir os dados em tempo real
                 if data:
                     # Formatar os dados extraídos como uma string, onde cada linha tem o formato 'categoria: R$ valor'
-                    data_str = '\n'.join([f'{category}: R$ {value:,.2f}' for category, value in data])
+                    data_str = '\n'.join([f'{category}: R$ {round(value)}' for category, value in data])
                     # Exibir a string formatada com os dados extraídos
                     print(f"Dados extraídos em tempo real:\n{data_str}")
 
