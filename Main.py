@@ -42,7 +42,8 @@ def extract_data(text):
     ]
     # Criar uma expressão regular para capturar essas palavras-chave e valores
     category_pattern = '|'.join(re.escape(cat) for cat in categories)
-    pattern = re.compile(rf'(?P<Category>{category_pattern})\s*[-—_–]*\s*R\$[\s]*(?P<Value>[\d\.,]+)', re.IGNORECASE)
+
+    pattern = re.compile(rf'(?P<Category>{category_pattern})\s*[-—_–]*\s*R\S[\s]*(?P<Value>[\d\.,]+)', re.IGNORECASE)
     # Encontrar todas as correspondências no texto
     matches = pattern.findall(text) 
     # Inicializar uma lista vazia para armazenar os dados extraídos
@@ -56,7 +57,7 @@ def extract_data(text):
         category = category.strip()
         # Limpar e converter o valor
         #print('valor antes do replace',value)
-        value = value.replace('R$', '').replace('.', '').replace(',', '').strip()
+        value = value.replace('R$','').replace('.','').replace(',','').strip()
         #print('valor depois do replace',value)
         # Tentar converter o valor para float
         try:
@@ -178,6 +179,6 @@ root.title("Captura e Processamento de Tela")
 
 # Adicionar botão para iniciar a captura
 start_button = ttk.Button(root, text="Iniciar Captura", command=start_capture_with_image)
-start_button.pack(pady=20)
+start_button.pack(pady=(50))
 
 root.mainloop()
